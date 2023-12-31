@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <dialog id="form-box" style="margin:5em auto; width: auto; border: 1px solid #000; padding: 20px;">
-        <form id="submission-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+    <dialog id="form-box" style="margin:10em auto; width: auto; border: 1px solid #000; padding: 20px;">
+        <form id="submission-form" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
             <section style="display: flex; flex-direction: column;">
                 <label for="title">Title:</label>
                 <input id="title" type="text" placeholder="Title" required>
@@ -27,38 +27,42 @@
 
                 <label for="ipfsHash">IPFS Hash:</label>
                 <input id="ipfsHash" type="text" placeholder="IPFS Hash will appear here" readonly>
+                <label for="key">Private Key:</label>
+                <input type = "password" id="key" required>
                 <label for="drop-zone" style="align-self: center;">Upload Photo/video</label>
                 <div id="drop-zone" style="border: 2px dashed #ccc; border-radius: 20px; height: 200px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                     <p>Drag and drop video files to upload</p>
-                </div>
-
-              
+                </div>              
                 <button type="submit" style="align-self: end; padding: 10px 20px; margin-top: 10px;">SUBMIT</button>
             </section>
 
             <section style="display: flex; flex-direction: column;">
                 <div>
-                    <input type="radio" id="free-content" name="content-type" value="free">
+                    <input type="radio" id="free-content" name="content-type" value="free" onclick="toggleDiscounts(false)">
                     <label for="free-content">Free content</label>
                 </div>
                 <div>
-                    <input type="radio" id="paid-content" name="content-type" value="paid">
+                    <input type="radio" id="paid-content" name="content-type" value="paid" onclick="toggleDiscounts(true)">
                     <label for="paid-content">Paid content</label>
                 </div>
-                
+                <div class="discounts">
+                    <input id="price" type="text" placeholder="Enter Price...">
+                    <label>Discounts:</label>
+                        <div class = row>20% </div>
+                        <div class = row><input type="date"></div>
+                        <div class = row><input type="date"></div> 
+                        <div class = row>UG3 <button>+</button></div>
+                        <div class = row>60% </div>
+                        <div class = row><input type="date"></div>
+                        <div class = row><input type="date"></div> 
+                        <div class = row>UG3 <button>+</button></div>
+                    
+                    <!-- <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                        <div>80% <input type="date"> - <input type="date"> UG1, UG2 <button>-</button></div>
+                        <div>60% <input type="date"> - <input type="date"> UG3 <button>+</button></div>
 
-                <label for="key">Private Key:</label>
-                <input type = "password" id="key" required>
-
-                <!-- Add more form fields for discount, user groups, etc., as needed -->
-
-                <label>Discounts:</label>
-                <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                    <div>80% <input type="date"> - <input type="date"> UG1, UG2 <button>-</button></div>
-                    <div>60% <input type="date"> - <input type="date"> UG3 <button>+</button></div>
-                    <!-- Add more discounts as needed -->
+                    </div> -->
                 </div>
-
                 <!-- Add other sections following the same pattern -->
             </section>
         </form>
@@ -201,6 +205,12 @@
 
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script>
+        function toggleDiscounts(show) {
+            var discounts = document.querySelector('.discounts');
+            discounts.style.display = show ? 'block' : 'none'; // Show or hide based on the 'show' parameter
+        }
+    </script>
     <script>
         function loadSubscriptions() {
             // Example of making an AJAX request to a Flask route

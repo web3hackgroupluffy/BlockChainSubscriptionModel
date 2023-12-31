@@ -104,5 +104,8 @@ button:hover {
         width: 95%;
     }
 }
+.discounts {
+    display: none; /* Hide the discounts section by default */
+}
 
 /* Additional Styling as Needed */
