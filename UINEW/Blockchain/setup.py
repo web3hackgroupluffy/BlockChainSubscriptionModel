@@ -88,12 +88,14 @@ def viewUploadedContent(initiator_address, creator_address):
 
 def viewSubscribers(creator_address):
   """Returns a list of all subscribers for a creator"""
+  creator_address = Web3.to_checksum_address(creator_address)
   creator_subscribers = c.contract.functions.getSubscribers(creator_address).call()
   print("Creator Subscribers:", creator_subscribers)
   return creator_subscribers
 
 def viewSubscriptions(user_address):
    """Returns a list of the people a user has subscribed to."""
+   user_address =  Web3.to_checksum_address(user_address)
    user_subscriptions = c.contract.functions.getSubscriptions(user_address).call()
    print("User Subscriptions:", user_subscriptions)
    return user_subscriptions

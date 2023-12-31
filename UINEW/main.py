@@ -107,6 +107,24 @@ def get_file(ipfs_hash):
         return redirect(gateway_url)
     except Exception as e:
         return f"An error occurred: {e}", 500
+    
+@app.route('/get-subscriptions')
+def get_subscriptions():
+    print("ENTERED")
+    user_address = session.get('wallet_address')  # Retrieve user address from session
+    subscriptions = setup.viewSubscriptions(user_address)
+    return jsonify(subscriptions)
+
+@app.route('/get-subscribers')
+def get_subscribers():
+    creator_address = session.get('wallet_address')  # Retrieve creator address from session
+    subscribers = setup.viewSubscribers(creator_address)
+    test = ["cool", "funny", "epic"]
+    return jsonify(test)
+
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
+    return render_template('dashboard.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
