@@ -2,10 +2,9 @@
 
 Submitted by: **BinaryBills, Kleptis, zakzak1248, hlee18lee46**
 
-**Brain Chain** is Brain Chain is a subscription-based blockchain service for sharing academic documents, where users receive Ethereum when another user subscribes to them. Files are managed through an IPFS system.
+**Brain Chain** is a subscription-based blockchain service for sharing academic documents, where users receive Ethereum when another user subscribes to them. Files are managed through an IPFS system.
 
 ## Features
-
 Brain Chain is a subscription-based blockchain service tailored for students who want to share their lecture notes and documentation. Rather than paying for specific content, users subscribe directly to the creator of the notes, which provides a monetary value for students to be more engaged and contribute to academia. A user earns money when another user subscribes to them. The Blockchain stores all subscription data and access control, and IPFS stores the uploaded files. 
 
 ## How we built it
