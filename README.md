@@ -1,4 +1,4 @@
-# Brain Chain*
+# Brain Chain**
 
 Submitted by: **BinaryBills, Kleptis, zakzak1248, hlee18lee46**
 
@@ -15,7 +15,6 @@ We used Python and Flask to handle our back end and used HTML, CSS and bootstrap
 We tried to use ipfshttpclient python library in the first place, but the library ipfshttpclient did not support the newer version of the ipfs. We installed the older version, but the older version could not be run because the repo version was not supported. Then, we figured out another way to interact with ipfs, which was using json and requests python library and directly interact with ipfs with them.
 
 Another challenge was to find a way to deploy the project. We found out firebase was not an ideal choice for our flask app because it will not be static. 
-
 Lastly, web 3.0 poor compatibility with Metamask made signing transactions difficult. 
 
 ## Video Walkthrough
