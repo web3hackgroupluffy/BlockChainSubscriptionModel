@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to BrainChain</title>
+    <script src="script.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Form for file upload -->
+        <h2>Upload File to IPFS</h2>
+        <form action="/upload_file" method="post" enctype="multipart/form-data">
+            <input type="file" name="document">
+            <button type="submit">Upload File</button>
+        </form>
+        <div class="container mt-5">
+            <h2>Download File from IPFS</h2>
+            <form id="ipfs-form" action="" method="get" onsubmit="submitIPFSHash(); return false;">
+                <input type="text" id="ipfs-hash" placeholder="Enter IPFS Hash">
+                <button type="submit">Download File</button>
+            </form>
+        </div>
+        <script>
+            function submitIPFSHash() {
+                var ipfsHash = document.getElementById('ipfs-hash').value;
+                var url = '/get_file/' + encodeURIComponent(ipfsHash);
+                window.location.href = url;
+            }
+        </script>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
