@@ -17,24 +17,22 @@
         <form id="submission-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <section style="display: flex; flex-direction: column;">
                 <label for="title">Title:</label>
-                <input id="title" type="text" placeholder="Title">
+                <input id="title" type="text" placeholder="Title" required>
 
                 <label for="desc">Desc:</label>
-                <textarea id="desc" placeholder="Description"></textarea>
+                <textarea id="desc" placeholder="Description" required></textarea>
 
-                <label>Tags: (optional)</label>
-                <div id="tags" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                    <!-- Tags list -->
-                    <div>Yajoribe <button>-</button></div>
-                    <div>Krullin <button>+</button></div>
-                    <!-- Add more tags as needed -->
-                </div>
+                <label for="tags">Tags:</label>
+               <input id="tags" type="text" placeholder="Tags (comma-separated)" required>
 
+                <label for="ipfsHash">IPFS Hash:</label>
+                <input id="ipfsHash" type="text" placeholder="IPFS Hash will appear here" readonly>
                 <label for="drop-zone" style="align-self: center;">Upload Photo/video</label>
                 <div id="drop-zone" style="border: 2px dashed #ccc; border-radius: 20px; height: 200px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                     <p>Drag and drop video files to upload</p>
                 </div>
 
+              
                 <button type="submit" style="align-self: end; padding: 10px 20px; margin-top: 10px;">SUBMIT</button>
             </section>
 
@@ -47,9 +45,10 @@
                     <input type="radio" id="paid-content" name="content-type" value="paid">
                     <label for="paid-content">Paid content</label>
                 </div>
+                
 
-                <label for="price">Price:</label>
-                <input id="price" type="number" placeholder="0.00" min="0" step="0.01">
+                <label for="key">Private Key:</label>
+                <input type = "password" id="key" required>
 
                 <!-- Add more form fields for discount, user groups, etc., as needed -->
 
@@ -236,9 +235,8 @@
             });
         }
     </script>
-    <script>
-        // ... Your existing scripts ...
     
+    <script>
         const createPostButton = document.getElementById("create-post");
         const formBoxDialog = document.getElementById("form-box");
     
@@ -264,8 +262,53 @@
         dropZone.addEventListener('drop', function(e) {
             e.preventDefault();
             dropZone.style.borderColor = '#ccc';
-            // Handle file drop...
+    
+            // Assuming the first file is the one we're interested in
+            var file = e.dataTransfer.files[0];
+            var formData = new FormData();
+            formData.append('document', file);
+    
+            // Perform the fetch to upload the file
+            fetch('/upload_file', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ipfs_hash) {
+                    document.getElementById('ipfsHash').value = data.ipfs_hash;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
         }, false);
+
+        // Handle form submission
+    document.getElementById('submission-form').onsubmit = function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+        formData.append('key', document.getElementById('key').value);
+        formData.append('title', document.getElementById('title').value);
+        formData.append('description', document.getElementById('desc').value);
+        formData.append('tags', document.getElementById('tags').value);
+        formData.append('ipfsHash', document.getElementById('ipfsHash').value);
+
+        fetch('/submit_content', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    };
     
         // Optional: Close the dialog when clicking outside of it
         window.addEventListener('click', function(event) {

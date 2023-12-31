@@ -62,22 +62,27 @@ def some_route():
         pass
     return jsonify({'wallet_address': wallet_address})
     
-@app.route('/upload', methods=['GET', 'POST'])
-def upload():
+@app.route('/submit_content', methods=['GET', 'POST'])
+def submit_content():
     if request.method == 'POST':
         content_creator_address = session.get('wallet_address')
-        content_creator_private_key = request.form['private_key']
+        print(content_creator_address)
+        content_creator_private_key = request.form['key']
+        print(content_creator_private_key)
         title = request.form['title']
+        print(title)
         description = request.form['description']
+        print(description)
         tags = request.form['tags']
+        print(tags)
         ipfsHash = request.form['ipfsHash']
+        print(ipfsHash)
 
         try:
             setup.uploadContent(content_creator_address, content_creator_private_key, title, description, tags, ipfsHash)
             return "Content uploaded successfully"
         except Exception as e:
-            return f"An error occurred: {e}"
-    return render_template('upload.html')
+            return f"UH OH! An error occurred: {e}"
 
 @app.route('/upload_file', methods=['POST'])
 def upload_file():

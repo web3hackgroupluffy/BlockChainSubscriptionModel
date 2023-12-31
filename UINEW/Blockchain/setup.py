@@ -38,14 +38,19 @@ def uploadContent(content_creator_address, content_creator_private_key, title, d
    """Precondition: Title must be 32 characters or less"""
    if len(title) > 32:
     raise ValueError("String is too long. Maximum length is 32 bytes.")
+    
+   print("pass")
 
    content_creator_address = Web3.to_checksum_address(content_creator_address)
+   print("pass")
 
    # Convert to bytes
    bytes_str = Web3.to_bytes(text=title)
+   print("pass")
 
    # If necessary, pad the byte array to make it bytes32
    bytes32_str = bytes_str.ljust(32, b'\0')
+   print("pass")
    
    tx = c.contract.functions.creatorUpload(
     bytes32_str, description, tags, ipfsHash
@@ -55,10 +60,13 @@ def uploadContent(content_creator_address, content_creator_private_key, title, d
     'gasPrice': w3.to_wei('50', 'gwei'),
     'nonce': w3.eth.get_transaction_count(content_creator_address)
 })
-
+   print("pass")
    signed_tx = w3.eth.account.sign_transaction(tx, content_creator_private_key)
+   print("signed")
    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+   print("hashed")
    tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+   print("wait")
    print(f"Receipt at address: {tx_receipt}")
 
 
