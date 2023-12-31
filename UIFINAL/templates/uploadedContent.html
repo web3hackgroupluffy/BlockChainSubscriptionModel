@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> BrainChain </title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- IconScout CDN -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <dialog id="form-box" style="margin:5em auto; width: auto; border: 1px solid #000; padding: 20px;">
+        <form id="submission-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <section style="display: flex; flex-direction: column;">
+                <label for="title">Title:</label>
+                <input id="title" type="text" placeholder="Title" required>
+
+                <label for="desc">Desc:</label>
+                <textarea id="desc" placeholder="Description" required></textarea>
+
+                <label for="tags">Tags:</label>
+               <input id="tags" type="text" placeholder="Tags (comma-separated)" required>
+
+                <label for="ipfsHash">IPFS Hash:</label>
+                <input id="ipfsHash" type="text" placeholder="IPFS Hash will appear here" readonly>
+                <label for="drop-zone" style="align-self: center;">Upload Photo/video</label>
+                <div id="drop-zone" style="border: 2px dashed #ccc; border-radius: 20px; height: 200px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <p>Drag and drop video files to upload</p>
+                </div>
+
+              
+                <button type="submit" style="align-self: end; padding: 10px 20px; margin-top: 10px;">SUBMIT</button>
+            </section>
+
+            <section style="display: flex; flex-direction: column;">
+                <div>
+                    <input type="radio" id="free-content" name="content-type" value="free">
+                    <label for="free-content">Free content</label>
+                </div>
+                <div>
+                    <input type="radio" id="paid-content" name="content-type" value="paid">
+                    <label for="paid-content">Paid content</label>
+                </div>
+                
+
+                <label for="key">Private Key:</label>
+                <input type = "password" id="key" required>
+
+                <!-- Add more form fields for discount, user groups, etc., as needed -->
+
+                <label>Discounts:</label>
+                <div style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <div>80% <input type="date"> - <input type="date"> UG1, UG2 <button>-</button></div>
+                    <div>60% <input type="date"> - <input type="date"> UG3 <button>+</button></div>
+                    <!-- Add more discounts as needed -->
+                </div>
+
+                <!-- Add other sections following the same pattern -->
+            </section>
+        </form>
+    </dialog>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">🧠 BrainChain 🧠</a>
+            <div class="navbar-nav ml-auto">
+                <button class="btn btn-primary" id="create-post">Upload</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="py-4">
+        <div class="container">
+            <div class="row">
+                <!-- Left Sidebar -->
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <a href="{{ url_for('dashboard') }}" class="list-group-item list-group-item-action">
+                            <i class="uil uil-home"></i> Home
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" onclick="loadSubscriptions()">
+                            <i class="uil uil-compass"></i> Subscriptions
+                        </a>
+                        
+                        <a href="#" class="list-group-item list-group-item-action active">
+                            <i class="uil uil-chart-line"></i> Uploaded Content
+                        </a>
+                        <a href="{{ url_for('discover') }}" class="list-group-item list-group-item-action">
+                            <i class="uil uil-chart-line"></i> Discover
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" onclick="loadSubscribers()">
+                            <i class="uil uil-chart-line"></i> Subscribers
+                        </a>
+                    </div>
+                    <button class="btn btn-primary mt-3" id="create-post">Create Post</button>
+                </div>
+
+                <!-- Middle Content -->
+              <!-- Middle Content -->
+              <div class="col-md-6">
+                <div class="feeds">
+                    <!-- Iterate over each item in the uploaded content -->
+                    {% for item in content %}
+                        <div class="card feed mb-4">
+                            <!-- Card Header with User Info -->
+                            <div class="card-header">
+                                <div class="user d-flex align-items-center">
+                                    <!-- Add the user's profile photo, if available -->
+                                    <div class="profile-photo mr-3">
+                                        <img src="{{ url_for('static', filename='images/6389595.png') }}" class="rounded-circle" width="50" height="50">
+                                    </div>
+                                    <div class="info">
+                                        <!-- Use item's title -->
+                                        <h5 class="mb-0">{{ item[0]|byte32_to_string }}</h5>
+                                        <!-- Use item's creator address -->
+                                        <small class="text-muted">Creator: You</small>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <!-- Card Body with Content -->
+                            <div class="card-body">
+                                <!-- Use item's image, if available -->
+                                <img src="{{ url_for('static', filename='images/os.png') }}" alt="Content Photo" class="img-fluid mb-3">
+                                <!-- Use item's description -->
+                                <p class="card-text">{{ item[2] }}</p>
+                            </div>
+            
+                            <!-- Card Footer with Action Buttons -->
+                            <div class="card-footer">
+                                <div class="interaction-buttons d-flex justify-content-between">
+                                    <!-- Interaction buttons -->
+                                    <div>
+                                        <span class="mr-2"><i class="uil uil-heart"></i> Like</span>
+                                        <span class="mr-2"><i class="uil uil-comment-dots"></i> Comment</span>
+                                        <span><i class="uil uil-share-alt"></i> Share</span>
+                                    </div>
+                                    <div class="bookmark">
+                                        <span><i class="uil uil-bookmark-full"></i> Bookmark</span>
+                                    </div>
+                                </div>
+                                <!-- Download button -->
+                                <a href="http://localhost:8080/ipfs/{{ item[3] }}" target="_blank" class="btn btn-primary mt-3">Download Notes</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="col-md-3">
+                    <!-- Additional content or sidebar here -->
+                </div>
+
+                <!-- Subscription Modal -->
+<div class="modal fade" id="subscriptionModal" tabindex="-1" role="dialog" aria-labelledby="subscriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="subscriptionModalLabel">Subscriptions</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Subscriptions will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Subscribers Modal -->
+<div class="modal fade" id="subscribersModal" tabindex="-1" role="dialog" aria-labelledby="subscribersModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="subscribersModalLabel">Subscribers</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Subscribers will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+    </main>
+
+    
+
+
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script>
+        function loadSubscriptions() {
+            // Example of making an AJAX request to a Flask route
+            $.ajax({
+                url: '/get-subscriptions', // Flask route that returns subscription data
+                method: 'GET',
+                success: function(data) {
+                    var modalBody = $('#subscriptionModal .modal-body');
+                    modalBody.empty(); // Clear previous content
+                    data.forEach(function(subscription) {
+                        modalBody.append('<p>' + subscription + '</p>'); // Append each subscription
+                    });
+                    $('#subscriptionModal').modal('show'); // Show the modal
+                }
+            });
+        }
+    </script>
+    <script>
+        function loadSubscribers() {
+            // Example of making an AJAX request to a Flask route
+            $.ajax({
+                url: '/get-subscribers', // Flask route that returns subscriber data
+                method: 'GET',
+                success: function(data) {
+                    var modalBody = $('#subscribersModal .modal-body');
+                    modalBody.empty(); // Clear previous content
+                    data.forEach(function(subscriber) {
+                        modalBody.append('<p>' + subscriber + '</p>'); // Append each subscriber
+                    });
+                    $('#subscribersModal').modal('show'); // Show the modal
+                }
+            });
+        }
+    </script>
+    
+    <script>
+        const createPostButton = document.getElementById("create-post");
+        const formBoxDialog = document.getElementById("form-box");
+    
+        // Function to open the dialog
+        function openDialog() {
+            formBoxDialog.showModal();
+        }
+    
+        // Event listener for the 'Upload' button
+        createPostButton.addEventListener("click", openDialog);
+    
+        // Drag-and-drop functionality
+        const dropZone = document.getElementById('drop-zone');
+        dropZone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            dropZone.style.borderColor = 'blue';
+        }, false);
+    
+        dropZone.addEventListener('dragleave', function(e) {
+            dropZone.style.borderColor = '#ccc';
+        }, false);
+    
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            dropZone.style.borderColor = '#ccc';
+    
+            // Assuming the first file is the one we're interested in
+            var file = e.dataTransfer.files[0];
+            var formData = new FormData();
+            formData.append('document', file);
+    
+            // Perform the fetch to upload the file
+            fetch('/upload_file', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ipfs_hash) {
+                    document.getElementById('ipfsHash').value = data.ipfs_hash;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            });
+        }, false);
+
+        // Handle form submission
+    document.getElementById('submission-form').onsubmit = function(event) {
+        event.preventDefault();
+
+        var formData = new FormData(this);
+        formData.append('key', document.getElementById('key').value);
+        formData.append('title', document.getElementById('title').value);
+        formData.append('description', document.getElementById('desc').value);
+        formData.append('tags', document.getElementById('tags').value);
+        formData.append('ipfsHash', document.getElementById('ipfsHash').value);
+
+        fetch('/submit_content', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert("Successful upload");
+                console.log(data.message);  // Or display this message to the user
+            } else if (data.error) {
+                console.error(data.error);
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error: ' + error);
+            alert('Error: ' + error);
+        });
+    };
+    
+        // Optional: Close the dialog when clicking outside of it
+        window.addEventListener('click', function(event) {
+            if (event.target === formBoxDialog) {
+                formBoxDialog.close("actionCancelled");
+            }
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="./index.js"></script>
+    <script src="./style.css"></script>
+  
+</body>
+</html>

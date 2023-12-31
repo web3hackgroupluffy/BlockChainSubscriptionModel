@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Content</title>
+    <script>
+        function handleFileUpload(response) {
+            document.getElementById('ipfsHash').value = response;
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('form[action="/upload_file"]').onsubmit = function(event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                fetch('/upload_file', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ipfs_hash) {
+                        handleFileUpload(data.ipfs_hash);
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                })
+                .catch(error => alert('Error: ' + error));
+            };
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Form for file upload -->
+        <h2>Upload File to IPFS</h2>
+        <form action="/upload_file" method="post" enctype="multipart/form-data">
+            <input type="file" name="document" required>
+            <button type="submit">Upload File</button>
+        </form>
+
+        <h1>Content Upload</h1>
+        <form method="post">
+            <input type="text" name="private_key" placeholder="Your Private Key" required><br>
+            <input type="text" name="title" placeholder="Title" required><br>
+            <textarea name="description" placeholder="Description" required></textarea><br>
+            <input type="text" name="tags" placeholder="Tags" required><br>
+            <input type="text" id="ipfsHash" name="ipfsHash" placeholder="IPFS Hash" required readonly><br>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>

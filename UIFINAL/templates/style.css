@@ -1,0 +1,108 @@
+/* Dialog Styles */
+dialog {
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    margin: 40px auto;
+    overflow: hidden;
+}
+
+/* Form Layout */
+#submission-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* Form Elements */
+#submission-form label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+    color: #333;
+}
+
+#submission-form input[type="text"],
+#submission-form input[type="number"],
+#submission-form input[type="date"],
+#submission-form textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+#submission-form textarea {
+    height: 100px;
+}
+
+#drop-zone {
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+#drop-zone:hover {
+    border-color: #0056b3;
+}
+
+#drop-zone p {
+    text-align: center;
+    color: #666;
+    font-family: Arial, sans-serif;
+}
+
+/* Buttons and Interactions */
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Tags and Discounts Sections */
+#tags, .discounts {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.tag-item, .discount-item {
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    #submission-form {
+        grid-template-columns: 1fr;
+    }
+
+    dialog {
+        width: 95%;
+    }
+}
+
+/* Additional Styling as Needed */

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> BrainChain </title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- IconScout CDN -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" a href="{{ url_for('dashboard') }}"">🧠 BrainChain 🧠</a>
+        <div class="navbar-nav ml-auto">
+            <button class="btn btn-primary" id="create-post">Upload</button>
+        </div>
+    </div>
+</nav>
+
+    <!-- Discover Users -->
+    <div class="container my-4">
+        <h2>Discover Users</h2>
+        <div class="row">
+            <!-- Loop through users in your Flask template -->
+            {% for user in users %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ user }}</h5>
+                        <button class="btn btn-primary subscribe-btn" data-user="{{ user }}">Subscribe For 1 ETH</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Subscription Modal -->
+    <div class="modal" id="subscriptionModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Subscribe to Creator</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="password" id="privateKey" class="form-control" placeholder="Your Private Key">
+                    <input type="hidden" id="creatorAddress">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="confirmSubscribe">Confirm Subscription</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ... rest of the body ... -->
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    document.querySelectorAll('.subscribe-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('creatorAddress').value = this.getAttribute('data-user');
+            $('#subscriptionModal').modal('show');
+        });
+    });
+
+    document.getElementById('confirmSubscribe').addEventListener('click', function() {
+        var creatorAddress = document.getElementById('creatorAddress').value;
+        var privateKey = document.getElementById('privateKey').value;
+
+        // AJAX POST request to Flask server
+        $.post('/subscribe', {creator: creatorAddress, key: privateKey}, function(response) {
+            alert(response.message); // Display a message to the user
+            $('#subscriptionModal').modal('hide');
+        }).fail(function(error) {
+            alert('Error: ' + error.responseText);
+        });
+    });
+</script>
+</body>
+</html>
