@@ -2,26 +2,33 @@
 dialog {
     border-radius: 8px;
     background-color: #fff;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
     padding: 20px;
-    width: 80%;
-    max-width: 600px;
-    margin: 40px auto;
+    width: 80vw; /* Adjust the width as needed */
+    max-width: 1200px; /* Set a maximum width if required */
+    margin: 10em auto; /* Adjust margin as needed */
     overflow: hidden;
 }
 
 /* Form Layout */
 #submission-form {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    width: 100%; /* Ensure the form takes full width */
 }
 
 /* Form Elements */
+#submission-form section {
+    flex: 1; /* Allow sections to take full height */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
 #submission-form label {
     font-weight: bold;
-    margin-bottom: 8px;
-    display: block;
     color: #333;
 }
 
@@ -106,6 +113,11 @@ button:hover {
 }
 .discounts {
     display: none; /* Hide the discounts section by default */
+}
+.discount-item {
+    /* Assuming you want to limit the height to 200px and enable vertical scrolling */
+    max-height: 200px;
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* Additional Styling as Needed */
