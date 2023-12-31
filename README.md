@@ -1,4 +1,4 @@
-# Brain Chain**
+# Brain Chain
 
 Submitted by: **BinaryBills, Kleptis, zakzak1248, hlee18lee46**
 
