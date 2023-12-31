@@ -21,7 +21,7 @@ Lastly, web 3.0 poor compatibility with Metamask made signing transactions diffi
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://i.imgur.com/Ygf7yjk.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/KbLtXm5.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 <!-- Replace this with whatever GIF tool you used! -->
 GIF created with ...  
