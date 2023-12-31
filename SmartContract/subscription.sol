@@ -2,12 +2,24 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract SubscriptionManager {
+
+address public ownerOfSoftware;
+    
+    
     struct Subscription {
         address user;
         uint256 endTime;
     }
 
+    struct uploads {
+        bytes32 title;
+        string description;
+        string tags;
+        string ipfsHash;
+    }
+
     uint256 public constant subscriptionFee = 1 ether;
+    uint256 public constant serviceFee = 1 ether;
     uint256 public constant subscriptionDuration = 2 minutes;
 
     // Mapping of user addresses to their list of subscriptions
@@ -16,7 +28,17 @@ contract SubscriptionManager {
     // Mapping of creator addresses to their list of subscribers
     mapping(address => Subscription[]) public creatorSubscribers;
 
+    // Mapping of creator addresses to their creator content
+    mapping(address => uploads[]) public creatorContents;
+
+    //Global array
+    mapping(address => uploads[]) public allContent;
+
     event Subscribed(address indexed user, address indexed creator, uint256 endTime);
+
+    constructor() {
+        ownerOfSoftware = msg.sender; // Set the contract deployer as the owner
+    }
 
     function subscribe(address creator) external payable {
         require(msg.sender != creator, "Cannot subscribe to oneself");
@@ -41,6 +63,27 @@ contract SubscriptionManager {
         emit Subscribed(msg.sender, creator, block.timestamp + subscriptionDuration);
     }
 
+    function creatorUpload(bytes32 title, string memory description, string memory tags, string memory ipfsHash) public {
+    // Create a new upload
+    uploads memory newUpload = uploads({
+        title: title,
+        description: description,
+        tags: tags,
+        ipfsHash: ipfsHash
+    });
+
+    // Add the upload to the creator's (user's) content list
+    creatorContents[msg.sender].push(newUpload);
+    allContent[msg.sender].push(newUpload);
+    }
+
+    function getUploadsByCreator(address creator) public view returns (uploads[] memory) {
+    // Check if the caller is either the creator or a subscriber of the creator
+    require(msg.sender == creator || isSubscribed(msg.sender, creator), "Must be the creator or a subscriber");
+
+    return creatorContents[creator];
+    }
+
     function getSubscriptions(address user) external view returns (Subscription[] memory) {
         return userSubscriptions[user];
     }
@@ -48,6 +91,7 @@ contract SubscriptionManager {
     function getSubscribers(address creator) external view returns (Subscription[] memory) {
         return creatorSubscribers[creator];
     }
+
 
     function isSubscribed(address user, address creator) public view returns (bool) {
         Subscription[] memory subscriptions = userSubscriptions[user];
@@ -58,4 +102,5 @@ contract SubscriptionManager {
         }
         return false;
     }
+
 }
